@@ -87,7 +87,7 @@ Int Function GetEmptySlot(Actor akTarget, Bool Gender, String Area) global
 	While i < NumSlots
 		TexPath = NiOverride.GetNodeOverrideString(akTarget, Gender, Area + " [ovl" + i + "]", 9, 0)
 
-		If TexPath == "" || TexPath == "actors\\character\\overlays\\default.dds"
+		If (!NiOverride.HasNodeOverride(akTarget, Gender, Area + " [ovl" + i + "]", 9, 0)) || TexPath == "" || TexPath == "actors\\character\\overlays\\default.dds"
 			WriteLog("Slot " + i + " chosen for area: " + area)
 			Return i
 		EndIf
@@ -103,7 +103,9 @@ EndFunction
 
 Function ApplyOverlay(Actor akTarget, Bool Gender, String Area, String OverlaySlot, String TextureToApply) global
 	WriteLog("ApplyOverlay " + TextureToApply)
-
+	If (!NiOverride.HasOverlays(akTarget))
+		NiOverride.AddOverlays(akTarget)
+	EndIf
 	float alpha = Utility.RandomFloat(0.75, 1.0)
 
 	String Node = Area + " [ovl" + OverlaySlot + "]"
@@ -121,7 +123,9 @@ EndFunction
 
 int Function ReadyOverlay(Actor akTarget, Bool Gender, String Area, String TextureToApply, int Slot) global
 	int slotToUse
-
+	If (!NiOverride.HasOverlays(akTarget))
+		NiOverride.AddOverlays(akTarget)
+	EndIf
 	if Slot < 0
 		slotToUse = GetEmptySlot(akTarget, Gender, Area)
 	else
@@ -154,6 +158,7 @@ Function RemoveCumOverlay(Actor Act, Bool Gender, String NodeArea, Int NumOverla
 			NiOverride.RemoveNodeOverride(Act, Gender, Node, 8, -1)
 			NiOverride.RemoveNodeOverride(Act, Gender, Node, 2, -1)
 			NiOverride.RemoveNodeOverride(Act, Gender, Node, 3, -1)
+			NiOverride.ApplyNodeOverrides(akTarget)
 		EndIf
 
 		i += 1
