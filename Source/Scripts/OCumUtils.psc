@@ -158,11 +158,12 @@ Function RemoveCumOverlay(Actor Act, Bool Gender, String NodeArea, Int NumOverla
 			NiOverride.RemoveNodeOverride(Act, Gender, Node, 8, -1)
 			NiOverride.RemoveNodeOverride(Act, Gender, Node, 2, -1)
 			NiOverride.RemoveNodeOverride(Act, Gender, Node, 3, -1)
-			NiOverride.ApplyNodeOverrides(akTarget)
+			
 		EndIf
 
 		i += 1
 	endwhile
+	NiOverride.ApplyNodeOverrides(Act)
 EndFunction
 
 
